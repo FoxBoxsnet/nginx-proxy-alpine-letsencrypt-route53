@@ -1,7 +1,4 @@
 machine:
-  environment:
-    CF_EMAIL: 'user@example.com'
-    CF_KEY: 'K9uX2HyUjeWg5AhAb'
   pre:
     # install docker 1.9.1 with some CircleCI suggestions:
     # https://discuss.circleci.com/t/how-use-a-different-docker-version/298/8
