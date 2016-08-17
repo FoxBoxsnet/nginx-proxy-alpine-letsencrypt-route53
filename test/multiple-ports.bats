@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 load test_helpers
-SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-${TEST_FILE}
+SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-cloudflare-${TEST_FILE}
 
 function setup {
 	# make sure to stop any web container before each test so we don't
@@ -12,15 +12,15 @@ function setup {
 }
 
 
-@test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt container" {
-	# GIVEN nginx-proxy-alpine-letsencrypt
+@test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt-cloudflare container" {
+	# GIVEN nginx-proxy-alpine-letsencrypt-cloudflare
 	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 }
 
 
-@test "[$TEST_FILE] nginx-proxy-alpine-letsencrypt defaults to the service running on port 80" {
+@test "[$TEST_FILE] nginx-proxy-alpine-letsencrypt-cloudflare defaults to the service running on port 80" {
 	# WHEN
 	prepare_web_container bats-web-${TEST_FILE}-1 "80 90" -e VIRTUAL_HOST=web.bats
 
@@ -47,7 +47,7 @@ function setup {
 }
 
 
-# assert querying nginx-proxy-alpine-letsencrypt provides a response from the expected port of the web container
+# assert querying nginx-proxy-alpine-letsencrypt-cloudflare provides a response from the expected port of the web container
 # $1 port we are expecting an response from
 function assert_response_is_from_port {
 	local -r port=$1

@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 load test_helpers
-SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-${TEST_FILE}
+SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-cloudflare-${TEST_FILE}
 
 function setup {
 	# make sure to stop any web container before each test so we don't
@@ -12,7 +12,7 @@ function setup {
 }
 
 
-@test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt container" {
+@test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt-cloudflare container" {
 	# GIVEN
 	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro
 	assert_success
@@ -52,8 +52,8 @@ function setup {
 }
 
 
-# assert that querying nginx-proxy-alpine-letsencrypt with the given Host header produces a `HTTP 200` response
-# $1 Host HTTP header to use when querying nginx-proxy-alpine-letsencrypt
+# assert that querying nginx-proxy-alpine-letsencrypt-cloudflare with the given Host header produces a `HTTP 200` response
+# $1 Host HTTP header to use when querying nginx-proxy-alpine-letsencrypt-cloudflare
 function assert_200 {
 	local -r host=$1
 
@@ -61,8 +61,8 @@ function assert_200 {
 	assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
-# assert that querying nginx-proxy-alpine-letsencrypt with the given Host header produces a `HTTP 503` response
-# $1 Host HTTP header to use when querying nginx-proxy-alpine-letsencrypt
+# assert that querying nginx-proxy-alpine-letsencrypt-cloudflare with the given Host header produces a `HTTP 503` response
+# $1 Host HTTP header to use when querying nginx-proxy-alpine-letsencrypt-cloudflare
 function assert_503 {
 	local -r host=$1
 
