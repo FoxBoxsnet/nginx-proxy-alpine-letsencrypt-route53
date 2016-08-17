@@ -9,9 +9,9 @@ load test_helpers
 
 
 @test "[$TEST_FILE] -v /var/run/docker.sock:/tmp/docker.sock:ro" {
-	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-${TEST_FILE}-1
+	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-cloudflare-${TEST_FILE}-1
 
-	# WHEN nginx-proxy-alpine-letsencrypt runs on our docker host using the default unix socket 
+	# WHEN nginx-proxy-alpine-letsencrypt-cloudflare runs on our docker host using the default unix socket 
 	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
@@ -22,9 +22,9 @@ load test_helpers
 
 
 @test "[$TEST_FILE] -v /var/run/docker.sock:/f00.sock:ro -e DOCKER_HOST=unix:///f00.sock" {
-	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-${TEST_FILE}-2
+	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-cloudflare-${TEST_FILE}-2
 
-	# WHEN nginx-proxy-alpine-letsencrypt runs on our docker host using a custom unix socket 
+	# WHEN nginx-proxy-alpine-letsencrypt-cloudflare runs on our docker host using a custom unix socket 
 	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/f00.sock:ro -e DOCKER_HOST=unix:///f00.sock
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
@@ -35,13 +35,13 @@ load test_helpers
 
 
 @test "[$TEST_FILE] -e DOCKER_HOST=tcp://..." {
-	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-${TEST_FILE}-3
+	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-cloudflare-${TEST_FILE}-3
 	# GIVEN a container exposing our docker host over TCP
 	run docker_tcp bats-docker-tcp
 	assert_success
 	sleep 1s
 
-	# WHEN nginx-proxy-alpine-letsencrypt runs on our docker host using tcp to connect to our docker host
+	# WHEN nginx-proxy-alpine-letsencrypt-cloudflare runs on our docker host using tcp to connect to our docker host
 	run nginxproxy $SUT_CONTAINER -e DOCKER_HOST="tcp://bats-docker-tcp:2375" --link bats-docker-tcp:bats-docker-tcp
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
@@ -95,7 +95,7 @@ load test_helpers
 }
 
 
-# $1 nginx-proxy-alpine-letsencrypt container
+# $1 nginx-proxy-alpine-letsencrypt-cloudflare container
 function assert_nginxproxy_behaves {
 	local -r container=$1
 
