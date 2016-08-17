@@ -19,4 +19,4 @@ test:
   override:
     - make test
     - docker images
-    - docker history foxboxsnet/nginx-proxy-alpine-letsencrypt:bats
+    - docker history foxboxsnet/nginx-proxy-alpine-letsencrypt-cloudflare:bats
