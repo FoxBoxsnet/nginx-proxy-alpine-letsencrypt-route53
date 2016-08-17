@@ -17,6 +17,8 @@ dependencies:
 
 test:
   override:
+    - export CF_EMAIL='user@example.com'
+    - export CF_KEY='K9uX2HyUjeWg5AhAb'
     - make test
     - docker images
     - docker history foxboxsnet/nginx-proxy-alpine-letsencrypt-cloudflare:bats
