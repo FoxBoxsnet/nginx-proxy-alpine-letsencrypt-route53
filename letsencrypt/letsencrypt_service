@@ -26,17 +26,14 @@ update_certs() {
     # Create directorty for the first domain
     mkdir -p /etc/nginx/certs/$base_domain
     mkdir -p /etc/nginx/vhost.d/
-    mkdir -p /usr/share/nginx/html/.well-known/acme-challenge
     cd /etc/nginx/certs/
 
     if [ "$STAGING" = "yes" ];then
       echo "Let's Encrypt Staging : Enabled"
       echo "CA=\"https://acme-staging.api.letsencrypt.org/directory\""		  >  ./$base_domain/config
-      echo "WELLKNOWN=\"/usr/share/nginx/html/.well-known/acme-challenge\""	>> ./$base_domain/config
       echo CONTACT_EMAIL="${!email_varname}"									              >> ./$base_domain/config
     else
       echo "Let's Encrypt Staging : Disabled"
-      echo "WELLKNOWN=\"/usr/share/nginx/html/.well-known/acme-challenge\""	>  ./$base_domain/config
       echo CONTACT_EMAIL="${!email_varname}"									              >> ./$base_domain/config
     fi
 
@@ -65,10 +62,11 @@ update_certs() {
     /usr/local/bin/letsencrypt.sh \
       --cron \
       $params_d_str \
-      --challenge http-01 \
+      --challenge dns-01 \
       --out ./ \
       --algo secp384r1 \
-      --config ./$base_domain/config
+      --config ./$base_domain/config \
+      --hook /usr/local/bin/hook.py
       letsencrypt_sh_return=$?
 
       current=`openssl sha256 -r ./$base_domain/privkey.pem | awk '{print $1}'`

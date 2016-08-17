@@ -202,7 +202,29 @@ RUN apk add --no-cache \
 		coreutils \
 	&& curl -L https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/master/letsencrypt.sh \
 			-o /usr/local/bin/letsencrypt.sh \
-	&& chmod +x /usr/local/bin/letsencrypt.sh
+	&& chmod +x /usr/local/bin/letsencrypt.sh \
+	\
+	# letsencrypt-cloudflare-hook
+	# https://github.com/kappataumu/letsencrypt-cloudflare-hook
+	&& apk add --no-cache \ 
+		python \ 
+	&& apk add --no-cache --virtual .build-cloudflare \ 
+		python-dev \ 
+		py-setuptools \ 
+		openssl-dev \ 
+		libffi-dev \ 
+		musl-dev \ 
+		py-pip \ 
+		gcc \ 
+	&& curl -L https://raw.githubusercontent.com/kappataumu/letsencrypt-cloudflare-hook/master/requirements-python-2.txt \ 
+		-o requirements-python-2.txt \ 
+	&& pip install --no-cache-dir -r requirements-python-2.txt \ 
+	&& rm requirements-python-2.txt \ 
+	&& curl -L https://raw.githubusercontent.com/kappataumu/letsencrypt-cloudflare-hook/master/hook.py \ 
+		-o /usr/local/bin/hook.py \ 
+	&& chmod +x /usr/local/bin/hook.py \
+	&& apk del .build-cloudflare 
+
 
 
 EXPOSE 80 443
