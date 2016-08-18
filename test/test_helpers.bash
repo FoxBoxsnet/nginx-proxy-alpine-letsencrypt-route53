@@ -35,8 +35,6 @@ function nginxproxy {
 	&& docker run -d \
 		--name $container_name \
 		"$@" \
-		-e CF_EMAIL='user@example.com'
-		-e CF_KEY='K9uX2HyUjeWg5AhAb'
 		$SUT_IMAGE \
 	&& wait_for_nginxproxy_container_to_start $container_name \
 	&& docker logs $container_name

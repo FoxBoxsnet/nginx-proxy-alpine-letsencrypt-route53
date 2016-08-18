@@ -18,7 +18,7 @@ function setup {
 	prepare_web_container bats-web 80 -e VIRTUAL_HOST=web.bats
 
 	# WHEN nginx-proxy-alpine-letsencrypt-cloudflare runs with DEFAULT_HOST set to web.bats
-	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro -e DEFAULT_HOST=web.bats
+	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro -e DEFAULT_HOST=web.bats -e CF_EMAIL='user@example.com' -e CF_KEY='K9uX2HyUjeWg5AhAb'
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 
