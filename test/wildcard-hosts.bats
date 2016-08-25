@@ -14,7 +14,7 @@ function setup {
 
 @test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt-route53 container" {
 	# GIVEN
-	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro  -e CF_EMAIL='user@example.com' -e CF_KEY='K9uX2HyUjeWg5AhAb'
+	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro  -e AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX -e AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 }

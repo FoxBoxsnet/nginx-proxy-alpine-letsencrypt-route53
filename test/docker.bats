@@ -12,7 +12,7 @@ load test_helpers
 	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-route53-${TEST_FILE}-1
 
 	# WHEN nginx-proxy-alpine-letsencrypt-route53 runs on our docker host using the default unix socket 
-	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro  -e CF_EMAIL='user@example.com' -e CF_KEY='K9uX2HyUjeWg5AhAb'
+	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro  -e AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX -e AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 
@@ -25,7 +25,7 @@ load test_helpers
 	SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-route53-${TEST_FILE}-2
 
 	# WHEN nginx-proxy-alpine-letsencrypt-route53 runs on our docker host using a custom unix socket 
-	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/f00.sock:ro -e DOCKER_HOST=unix:///f00.sock  -e CF_EMAIL='user@example.com' -e CF_KEY='K9uX2HyUjeWg5AhAb'
+	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/f00.sock:ro -e DOCKER_HOST=unix:///f00.sock  -e AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX -e AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 
@@ -42,7 +42,7 @@ load test_helpers
 	sleep 1s
 
 	# WHEN nginx-proxy-alpine-letsencrypt-route53 runs on our docker host using tcp to connect to our docker host
-	run nginxproxy $SUT_CONTAINER -e DOCKER_HOST="tcp://bats-docker-tcp:2375" --link bats-docker-tcp:bats-docker-tcp  -e CF_EMAIL='user@example.com' -e CF_KEY='K9uX2HyUjeWg5AhAb'
+	run nginxproxy $SUT_CONTAINER -e DOCKER_HOST="tcp://bats-docker-tcp:2375" --link bats-docker-tcp:bats-docker-tcp  -e AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX -e AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 	
