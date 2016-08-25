@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 load test_helpers
-SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-cloudflare-${TEST_FILE}
+SUT_CONTAINER=bats-nginx-proxy-alpine-letsencrypt-route53-${TEST_FILE}
 
 function setup {
 	# make sure to stop any web container before each test so we don't
@@ -12,13 +12,13 @@ function setup {
 }
 
 
-@test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt-cloudflare container" {
+@test "[$TEST_FILE] start a nginx-proxy-alpine-letsencrypt-route53 container" {
 	run nginxproxy $SUT_CONTAINER -v /var/run/docker.sock:/tmp/docker.sock:ro  -e CF_EMAIL='user@example.com' -e CF_KEY='K9uX2HyUjeWg5AhAb'
 	assert_success
 	docker_wait_for_log $SUT_CONTAINER 3 "Watching docker events"
 }
 
-@test "[$TEST_FILE] nginx-proxy-alpine-letsencrypt-cloudflare forwards requests for 2 hosts" {
+@test "[$TEST_FILE] nginx-proxy-alpine-letsencrypt-route53 forwards requests for 2 hosts" {
 	# WHEN a container runs a web server with VIRTUAL_HOST set for multiple hosts
 	prepare_web_container bats-multiple-hosts-1 80 -e VIRTUAL_HOST=multiple-hosts-1-A.bats,multiple-hosts-1-B.bats
 

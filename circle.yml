@@ -17,8 +17,8 @@ dependencies:
 
 test:
   override:
-    - export CF_EMAIL='user@example.com'
-    - export CF_KEY='K9uX2HyUjeWg5AhAb'
+    - export AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX
+    - export AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     - make test
     - docker images
-    - docker history foxboxsnet/nginx-proxy-alpine-letsencrypt-cloudflare:bats
+    - docker history foxboxsnet/nginx-proxy-alpine-letsencrypt-route53:bats

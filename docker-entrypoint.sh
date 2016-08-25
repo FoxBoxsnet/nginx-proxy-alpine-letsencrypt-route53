@@ -7,32 +7,32 @@ if [[ $DOCKER_HOST == unix://* ]]; then
 	if ! [ -S $socket_file ]; then
 		cat >&2 <<-EOT
 			ERROR: you need to share your Docker host socket with a volume at $socket_file
-			Typically you should run your foxboxsnet/nginx-proxy-alpine-letsencrypt-cloudflare with: \`-v /var/run/docker.sock:$socket_file:ro\`
+			Typically you should run your foxboxsnet/nginx-proxy-alpine-letsencrypt-route53 with: \`-v /var/run/docker.sock:$socket_file:ro\`
 			See the documentation at http://git.io/vZaGJ
 		EOT
 		socketMissing=1
 	fi
 fi
 
-# Please specify the CloudFlare APIs.
-if [ ! -n "$CF_EMAIL" ] ;then
+# Please specify the Amazon Route53 APIs.
+if [ ! -n "$AWS_ACCESS_KEY_ID" ] ;then
 	cat >&2 <<-EOT
-		ERROR: Please specify the CloudFlare API CF_EMAIL.
+		ERROR: Please specify the Amazon Route53 AWS_ACCESS_KEY_ID.
 		docker run -d
 		...
-		-e CF_EMAIL='user@example.com'
-		-e CF_KEY='K9uX2HyUjeWg5AhAb'
+		-e AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX
+		-e AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		...
 	EOT
 	socketMissing=1
 fi
-if [ ! -n "$CF_KEY" ];then
+if [ ! -n "$AWS_SECRET_ACCESS_KEY" ];then
 	cat >&2 <<-EOT
-		ERROR: Please specify the CloudFlare API CF_KEY.
+		ERROR: Please specify the Amazon Route53 AWS_SECRET_ACCESS_KEY.
 		docker run -d
 		...
-		-e CF_EMAIL='user@example.com'
-		-e CF_KEY='K9uX2HyUjeWg5AhAb'
+		-e AWS_ACCESS_KEY_ID=ACCESS_KEYXXXXXXXXXX
+		-e AWS_SECRET_ACCESS_KEY=SECRET_KEYXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		...
 	EOT
 	socketMissing=1

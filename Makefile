@@ -10,7 +10,7 @@ update-dependencies:
 	docker pull docker:1.9.1
 
 test:
-	docker build -t foxboxsnet/nginx-proxy-alpine-letsencrypt-cloudflare:bats .
+	docker build -t foxboxsnet/nginx-proxy-alpine-letsencrypt-route53:bats .
 	bats test
 
 test-clean:
