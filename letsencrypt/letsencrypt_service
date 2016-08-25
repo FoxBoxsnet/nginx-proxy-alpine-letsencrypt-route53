@@ -66,7 +66,7 @@ update_certs() {
       --out ./ \
       --algo secp384r1 \
       --config ./$base_domain/config \
-      --hook /usr/local/bin/hook.py
+      --hook /go/bin/letsencrypt.sh-dns-route53
       letsencrypt_sh_return=$?
 
       current=`openssl sha256 -r ./$base_domain/privkey.pem | awk '{print $1}'`

@@ -14,6 +14,11 @@ ENV DOCKER_HOST unix:///tmp/docker.sock
 ENV OPENSSL_VERSION 1.0.2h-r1
 ## ct-submit
 ENV CT_SUBMIT_VERSION 1.1.2
+# letsencrypt.sh-dns-route53
+ENV route53 0.0.1
+# Golang
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:/usr/bin/:$PATH
 
 # Install nginx
 ENV GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
@@ -157,14 +162,14 @@ RUN apk add --no-cache bash \
 		curl \
 		ca-certificates \
 	# Install Forego
-	&&curl -L https://github.com/jwilder/forego/releases/download/$FOREGO_VERSION/forego \
+	&&curl -fSL https://github.com/jwilder/forego/releases/download/$FOREGO_VERSION/forego \
 		-o /usr/local/bin/forego \
 	&& chmod u+x /usr/local/bin/forego \
 	\
 	# Install docker-gen
 	&& mkdir -p /usr/local/temp \
 	&& cd /usr/local/temp \
-	&& curl -L https://github.com/jwilder/docker-gen/releases/download/0.7.3/docker-gen-alpine-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
+	&& curl -fSL https://github.com/jwilder/docker-gen/releases/download/0.7.3/docker-gen-alpine-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
 		-o docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
 	&& tar -C /usr/local/bin -xvzf docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
 	&& rm docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
@@ -179,7 +184,7 @@ RUN apk add --no-cache --virtual .build-ct-submit \
 		ca-certificates \
 	&& mkdir -p /usr/local/temp \
 	&& cd /usr/local/temp \
-	&& curl -L https://github.com/grahamedgecombe/ct-submit/archive/v$CT_SUBMIT_VERSION.tar.gz \
+	&& curl -fSL https://github.com/grahamedgecombe/ct-submit/archive/v$CT_SUBMIT_VERSION.tar.gz \
 		-o ct-submit-$CT_SUBMIT_VERSION.tar.gz \
 	&& tar -C /usr/local/temp -xvzf ct-submit-$CT_SUBMIT_VERSION.tar.gz \
 	&& rm ct-submit-$CT_SUBMIT_VERSION.tar.gz \
@@ -200,31 +205,18 @@ RUN apk add --no-cache \
 		sed \
 		openssl=$OPENSSL_VERSION \
 		coreutils \
-	&& curl -L https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/master/letsencrypt.sh \
+	&& curl -fSL https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/master/letsencrypt.sh \
 			-o /usr/local/bin/letsencrypt.sh \
 	&& chmod +x /usr/local/bin/letsencrypt.sh \
 	\
-	# letsencrypt-cloudflare-hook
-	# https://github.com/kappataumu/letsencrypt-cloudflare-hook
-	&& apk add --no-cache \ 
-		python \ 
-	&& apk add --no-cache --virtual .build-cloudflare \ 
-		python-dev \ 
-		py-setuptools \ 
-		openssl-dev \ 
-		libffi-dev \ 
-		musl-dev \ 
-		py-pip \ 
-		gcc \ 
-	&& curl -L https://raw.githubusercontent.com/kappataumu/letsencrypt-cloudflare-hook/master/requirements-python-2.txt \ 
-		-o requirements-python-2.txt \ 
-	&& pip install --no-cache-dir -r requirements-python-2.txt \ 
-	&& rm requirements-python-2.txt \ 
-	&& curl -L https://raw.githubusercontent.com/kappataumu/letsencrypt-cloudflare-hook/master/hook.py \ 
-		-o /usr/local/bin/hook.py \ 
-	&& chmod +x /usr/local/bin/hook.py \
-	&& apk del .build-cloudflare 
-
+	# Install letsencrypt.sh-dns-route53
+	# https://github.com/FoxBoxsnet/letsencrypt.sh-dns-route53
+	\
+	&& apk add --no-cache --virtual .build-route53 \
+		git \
+		go \
+	&& go get github.com/FoxBoxsnet/letsencrypt.sh-dns-route53 \
+	&& rm -rf /go/src /go/pkg
 
 
 EXPOSE 80 443
