@@ -2,7 +2,7 @@
 set -e
 
 # Warn if the DOCKER_HOST socket does not exist
-if [[ $DOCKER_HOST == unix://* ]]; then
+if [[ $DOCKER_HOST == unix://* ]];then
 	socket_file=${DOCKER_HOST#unix://}
 	if ! [ -S $socket_file ]; then
 		cat >&2 <<-EOT
@@ -15,7 +15,7 @@ if [[ $DOCKER_HOST == unix://* ]]; then
 fi
 
 # Please specify the Amazon Route53 APIs.
-if [ ! -n "$AWS_ACCESS_KEY_ID" ] ;then
+if [ ! -n "$AWS_ACCESS_KEY_ID" ];then
 	cat >&2 <<-EOT
 		ERROR: Please specify the Amazon Route53 AWS_ACCESS_KEY_ID.
 		docker run -d
@@ -39,7 +39,7 @@ if [ ! -n "$AWS_SECRET_ACCESS_KEY" ];then
 fi
 
 # If the user has run the default command and the socket doesn't exist, fail
-if [ "$socketMissing" = 1 -a "$1" = forego -a "$2" = start -a "$3" = '-r' ]; then
+if [ "$socketMissing" = 1 -a "$1" = forego -a "$2" = start -a "$3" = '-r' ];then
 	exit 1
 fi
 
